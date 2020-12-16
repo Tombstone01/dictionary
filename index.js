@@ -1,17 +1,11 @@
 const dictionary = require('word-definition');
-const { manual } = require("./helpers/help");
-const { validateWord, validateLang, define } = require('./helpers/util');
+const { getHelp } = require("./helpers/help");
+const { validateWord, getLocale, define } = require('./helpers/util');
 
-const query = process.argv[2];
-const languageCode = process.argv[3];
+const option = process.argv[2];
+const word = process.argv[3];
 
-const word = query == '-h' ? manual() : validateWord(query);
+if (option == '-h') getHelp();
+if (option == '-d' && validateWord(word) < 0) process.exit(-1);
 
-const locale = validateLang(languageCode);
-
-const options = {
-  exact: true,
-  formatted: false
-};
-
-dictionary.getDef(word, locale, options, define);
+dictionary.getDef(word, getLocale(), { exact: false, hyperlinks: "none", formatted: false }, define);
