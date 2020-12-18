@@ -1,3 +1,4 @@
+const dictionary = require('word-definition');
 const { getUserLocale } = require('get-user-locale');
 
 /**
@@ -13,6 +14,8 @@ const validateWord = (word) => {
 		return -1;
 	} else return 1
 }
+
+const dict = (word) => dictionary.getDef(word, getLocale(), { exact: false, hyperlinks: "none", formatted: false }, define);
 
 const getLocale = () => getUserLocale().split('-')[0];
 
@@ -39,10 +42,12 @@ const define = (explanation) => {
 	} else {
 		console.log(`${word} - [${category}] ${definition}`);
 	}
+
+	process.exit(-1);
 };
 
 module.exports = {
 	validateWord,
 	getLocale,
-	define
+	dict
 };
