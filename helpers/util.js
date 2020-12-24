@@ -1,4 +1,8 @@
 const dictionary = require('word-definition');
+const unirest = require('unirest');
+const chalk = require("chalk");
+require('dotenv').config();
+
 const { getUserLocale } = require('get-user-locale');
 
 /**
@@ -15,6 +19,32 @@ const validateWord = (word) => {
 	} else return 1
 }
 
+
+const urban = (word) => {
+	const req = unirest("GET", "https://mashape-community-urban-dictionary.p.rapidapi.com/define");
+
+	req.query({ "term": word });
+	req.headers({
+		"x-rapidapi-key": process.env.API_KEY,
+		"x-rapidapi-host": process.env.HOST,
+		"useQueryString": true
+	});
+
+	req.end((res) => {
+		if (res.error) throw new Error(res.error);
+
+		const { list } = res.body;
+
+		console.log("reqyures");
+
+		list.forEach((value) =>
+		{
+			const { definition, author, example } = value;
+			console.log(` - ${chalk.white.bold(definition)}\n`);
+		});
+	});
+};
+
 const dict = (word) => dictionary.getDef(word, getLocale(), { exact: false, hyperlinks: "none", formatted: false }, define);
 
 const getLocale = () => getUserLocale().split('-')[0];
@@ -22,8 +52,8 @@ const getLocale = () => getUserLocale().split('-')[0];
 /**
  * This function is called when a explanation
  * has been found I guess
- * 
- * @param { Object } explanation 
+ *
+ * @param { Object } explanation
  */
 const define = (explanation) => {
 	const { word, err, category, definition } = explanation;
@@ -40,7 +70,7 @@ const define = (explanation) => {
 		console.log("sorry, the word is either mispelled or does not exist");
 		process.exit(-1);
 	} else {
-		console.log(`${word} - [${category}] ${definition}`);
+		console.log(` - **${word}** - [${category}] ${definition}`);
 	}
 
 	process.exit(-1);
@@ -49,5 +79,6 @@ const define = (explanation) => {
 module.exports = {
 	validateWord,
 	getLocale,
-	dict
+	dict,
+	urban
 };
