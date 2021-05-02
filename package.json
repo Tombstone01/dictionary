@@ -19,6 +19,7 @@
   },
   "homepage": "https://github.com/tombstone001/dictionary#readme",
   "dependencies": {
+    "boring": "^1.1.1",
     "chalk": "^4.1.0",
     "dotenv": "^8.2.0",
     "get-user-locale": "^1.4.0",
@@ -27,6 +28,7 @@
     "nodemon": "^2.0.6",
     "text-to-speech": "^1.0.10",
     "unirest": "^0.6.0",
+    "wikipedia": "^1.1.1",
     "word-definition": "^2.1.6"
   }
 }

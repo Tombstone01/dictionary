@@ -1,11 +1,13 @@
-const dictionary = require('word-definition');
-const { getHelp } = require("./helpers/help");
-const { validateWord, dict, urban } = require('./helpers/util');
+const { getHelp } = require("./lib/help");
+const { urban } = require('./lib/urban');
+const { query } = require('./lib/wiki')
 
-const option = process.argv[2];
-const word = process.argv[3];
-// const word = process.argv.splice(3).toString().replace(",", " ")
+const boring = require('boring')({ end: true });
 
-if (option == '-h') getHelp();
-if (option == '-d' && validateWord(word) > 0) dict(word);
-if (option == '-u') urban(word);
+const { _, help, wiki, school, define } = boring
+
+if (!_) process.exit(-2);
+if (!help && !wiki && !school && !define) process.exit(-1);
+if (wiki) query(_);
+if (school) urban(_);
+if (define) console.log('fill yours here');
